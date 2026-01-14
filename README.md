@@ -1,15 +1,4 @@
-# To-Do Kanban Board (Full Stack)
-
-Live site:
-
-- https://mosambiswas.me/To-Do/
-- https://biswasmosam.github.io/To-Do/
-
-Backend (health check):
-
-- https://to-do-i8qi.onrender.com/api/health
-
-A modern Kanban board with two modes:
+## A modern Kanban board with two modes:
 
 - **Offline mode**: `index.html` + `app.js` (stores tasks in `localStorage`)
 - **Account mode**: `login.html` + `board.html` + backend API (stores tasks in MongoDB, supports Google Sign-In)
