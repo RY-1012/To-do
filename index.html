@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TO-DO Board</title>
+
+    <link rel="canonical" href="https://mosambiswas.me/To-Do/" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
+    <meta name="theme-color" content="#1a1a1a" />
+
+    <meta name="description" content="A modern Kanban TO-DO board with task groups, drag & drop, and optional account mode." />
+    <meta name="keywords" content="To-Do, Kanban, task board, productivity, Mosam Biswas" />
+    <meta name="author" content="Mosam Biswas" />
+    <meta name="robots" content="index, follow" />
+
+    <meta property="og:title" content="TO-DO Board" />
+    <meta property="og:description" content="A modern Kanban board to manage tasks across Not Started, In Progress, and Done." />
+    <meta property="og:image" content="https://mosambiswas.me/To-Do/favicon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mosambiswas.me/To-Do/" />
+    <meta property="og:site_name" content="TO-DO Board" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="TO-DO Board" />
+    <meta name="twitter:description" content="A modern Kanban board to manage tasks." />
+    <meta name="twitter:image" content="https://mosambiswas.me/To-Do/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo">
+                <span class="check-icon">✓</span>
+                <span class="logo-text">TO-DO</span>
+            </div>
+            <div class="view-selector">
+                <div class="view-option active" id="boardViewBtn" onclick="app.switchView('board')">
+                    <span class="board-icon">▦</span> Board view
+                </div>
+                <div class="view-option" id="workflowViewBtn" onclick="app.switchView('workflow')">
+                    <span class="workflow-icon">⚡</span> Workflow
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section at Bottom (shows when signed in) -->
+        <div class="profile-section" id="profileSection" style="display: none;">
+            <div class="profile-card" id="profileCard">
+                <div class="profile-avatar" id="profileAvatar">U</div>
+                <div class="profile-info">
+                    <div class="profile-name" id="profileName">User</div>
+                    <div class="profile-email" id="profileEmail">—</div>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button class="logout-btn" id="logoutBtn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Sign In Prompt (shows when not signed in) -->
+        <div class="signin-prompt" id="signinPrompt">
+            <div class="signin-icon">👤</div>
+            <p>Not signed in</p>
+            <button class="signin-btn" onclick="window.location.href='login.html'">Sign In</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="board" id="boardView">
+            <!-- Not Started Column -->
+            <div class="column" data-status="not-started">
+                <div class="column-header">
+                    <span class="status-indicator not-started-indicator"></span>
+                    <span class="column-title">Not started</span>
+                    <span class="count" id="notStartedCount">0</span>
+                </div>
+                <div class="cards-container" id="notStartedCards">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="new-page-btn" data-status="not-started">
+                    <span>+</span> New task
+                </button>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="column" data-status="in-progress">
+                <div class="column-header">
+                    <span class="status-indicator in-progress-indicator"></span>
+                    <span class="column-title">In progress</span>
+                    <span class="count" id="inProgressCount">0</span>
+                </div>
+                <div class="cards-container" id="inProgressCards">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="new-page-btn" data-status="in-progress">
+                    <span>+</span> New task
+                </button>
+            </div>
+
+            <!-- Done Column -->
+            <div class="column" data-status="done">
+                <div class="column-header">
+                    <span class="status-indicator done-indicator"></span>
+                    <span class="column-title">Done</span>
+                    <span class="count" id="doneCount">0</span>
+                </div>
+                <div class="cards-container" id="doneCards">
+                    <!-- Cards will be added here -->
+                </div>
+                <button class="new-page-btn" data-status="done">
+                    <span>+</span> New task
+                </button>
+            </div>
+        </div>
+
+        <!-- Workflow Canvas View -->
+        <div class="workflow-canvas" id="workflowView" style="display: none;">
+            <div class="workflow-toolbar">
+                <button class="workflow-btn" id="addWorkflowTaskBtn">
+                    <span>+</span> New Task
+                </button>
+                <button class="workflow-btn" id="toggleConnectionModeBtn">
+                    <span>↔</span> Connect Mode
+                </button>
+                <button class="workflow-btn" id="clearConnectionsBtn">
+                    <span>✕</span> Clear Connections
+                </button>
+            </div>
+            <svg id="connectionsSvg" class="connections-layer"></svg>
+            <div class="canvas-grid" id="canvasGrid">
+                <!-- Workflow tasks will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding/editing tasks -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add New Task</h2>
+            <input type="text" id="taskInput" placeholder="Enter task name..." />
+            <input type="text" id="taskEmoji" placeholder="Emoji (optional)" maxlength="2" />
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <select id="groupSelect" style="flex: 1; padding: 12px; background: #1a1a1a; border: 1px solid #444; border-radius: 6px; color: #fff; font-size: 1rem;">
+                    <option value="">No Group</option>
+                </select>
+                <button id="newGroupBtn" style="padding: 12px 20px; background: #34C759; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s;">+ Group</button>
+            </div>
+            <div id="newGroupInput" style="display: none; margin-bottom: 15px;">
+                <input type="text" id="newGroupName" placeholder="New group name..." style="width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #444; border-radius: 6px; color: #fff; font-size: 1rem; margin-bottom: 8px;" />
+                <div style="display: flex; gap: 8px;">
+                    <button id="createGroupBtn" style="flex: 1; padding: 8px; background: #34C759; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Create</button>
+                    <button id="cancelGroupBtn" style="flex: 1; padding: 8px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="saveTaskBtn">Save</button>
+                <button id="cancelTaskBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding workflow tasks -->
+    <div id="workflowTaskModal" class="modal">
+        <div class="modal-content">
+            <h2 id="workflowModalTitle">Add Workflow Task</h2>
+            <input type="text" id="workflowTaskInput" placeholder="Enter task name..." />
+            <input type="text" id="workflowTaskEmoji" placeholder="Emoji (optional)" maxlength="2" />
+            <textarea id="workflowTaskDescription" placeholder="Description (optional)" style="width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #444; border-radius: 6px; color: #fff; font-size: 1rem; min-height: 80px; resize: vertical;"></textarea>
+            <div class="modal-buttons">
+                <button id="saveWorkflowTaskBtn">Save</button>
+                <button id="cancelWorkflowTaskBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding groups -->
+    <div id="groupModal" class="modal">
+        <div class="modal-content">
+            <h2>Create New Group</h2>
+            <input type="text" id="groupInput" placeholder="Enter group name..." />
+            <div class="modal-buttons">
+                <button id="saveGroupModalBtn">Create</button>
+                <button id="cancelGroupModalBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Force redirect to login if not signed in
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        } else {
+            // Load the backend application script
+            const script = document.createElement('script');
+            script.src = 'app-backend.js';
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>
+<!--
+
+                              ::::::::::::::::::::                              
+                        -::::::::::::::::::::::::::::::-                        
+                     ::::::::::::::::::::::::::::::::::::::-                    
+                  :::::-+%@@+::::::::::::::::::::::-%#+-::::::-                 
+               :::::=%@@@@@@@-:::::::::::::::::::::%@@@@@%=:::::-               
+             :::::#@@@@@@@@#::::-*%@@@@@@@@@@@*-:::*@@@@@@@@@=::::-             
+           ::::-%@@@@@@@@=:::*@@@@@@@@@@@@@@@@@@@@*:::#@@@@@@@@+::::-           
+         :::::#@@@@@@@@+::-%@@@@@@@@@@@@@@@@@@@@@@@@%-:-#@@@@@@@@+::::=         
+        ::::+@@@@@@@@%-:-%@@@@@@@@@@@@@@@@@@@@@@@@@@@@%-:=%@@@@@@@%-:::-        
+       ::::*@@@@@@@@*::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::#@@@@@@@@+::::+      
+     ::::-%@@@@@@@@*::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*::%@@@@@@@@#::::=     
+    :::::%@@@@@@@@#::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::#@@@@@@@@#::::=    
+    ::::%@@@@@@@@@-:=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=:=@@@@@@@@@#::::@   
+   ::::*@@@@@@@@@*::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#::*@@@@@@@@@+::::+  
+  ::::+@@@@@@@@@@-::%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%::-@@@@@@@@@@=:::-  
+ :::::%@@@@@@@@@%-::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-::%@@@@@@@@@#::::+ 
+ ::::+@@@@@@@@@@%-::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:::%@@@@@@@@@@=:::: 
+:::::@@@@@@@@@@@%-::%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%:::%@@@@@@@@@@%::::-
+::::=@@@@@@@@@@@@-::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#::-%@@@@@@@@@@@=:::=
+::::+@@@@@@@@@@@@*::=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=::+@@@@@@@@@@@@*:::=
+::::*@@@@@@@@@@@@@-::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+:::%@@@@@@@@@@@@#:::-
+::::#@@@@@@@@@@@@@*:::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*:::+@@@@@@@@@@@@@#::::
+::::#@@@@@@@@@@@@@@=:::=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::::%@@@@@@@@@@@@@#::::
+::::*@@@@@@@@@@@@@@@-::::#@@@@@@@@@@@@@@@@@@@@@@@@@@@@%:::::%@@@@@@@@@@@@@@#:::-
+::::+@@@@@@@@@@@@%-:::::::-%@@@@@@@@@@@@@@@@@@@@@@@@%-:::::::*@@@@@@@@@@@@@*:::-
+::::=@@@@@@@@@%=:::::::::::::+@@@@@@@@@@@@@@@@@@@@@@@%-::::::::-#@@@@@@@@@@+:::=
+:::::%@@@@@@+:::::::::::::::::::-+%@@@@@@@@@@%+-:=%@@@@%-:::::::::=%@@@@@@@::::=
+ ::::-%@@#-::::::::::::::::::::::::::::::::::::::::=%@@@@%+:::::::::-+%@@@+::::# 
+ -::::==::::::::::::-#-::::::::::::::::::::::::::::::-#@@@@@*::::::::::-##::::+ 
+  ::::::::::::::::=@@@@@#-::::::::::::::::::::::::::::::*@@@@@#-:::::::::::::-  
+   :::::::::::::*@@@@@@@@@@@*-:::::::::::::::::::=*:::::::+%@@@@%-:::::::::::*  
+    :::::::::-%@@@@@*::+%@@@@@@@@%#+-:::::-=*%%@@@@@#:::::::-%@@@@%=::::::::%   
+    -::::::+%@@@@%=:::::::-+%@@@@@@@@@@@@@@@@@@@@@%=::::::::::-#@@@@@*:::::=    
+     -:::*@@@@@#-::::::::::::::-=+#%@@@@@@@%#*=-:::::::::::::::#@@@@*:::::+     
+      -*@@@@@*::::::::::::::::::::::::::::::::::::::::::::::-#@@@@%-::::-*      
+        #@%=:::::::::--:::::::::::::::::::::::::::::::::::=%@@@@%=:::::-        
+         :::::::::::#@@@#-:::::::::::::::::::::::::::::=%@@@@@%=::::::+         
+           -:::::::=@@@@@@@@%+:::::::::::::::::::::+%@@@@@@@%-::::::=           
+             :::::::::=%@@@@@@@@@%%%#**+++**#%%%@@@@@@@@@%=:::::::=             
+               -::::::::::=*%@@@@@@@@@@@@@@@@@@@@@@@@%+-::::::::=               
+                 =:::::::::::::-=+*#%%@@@@@@%%#*+=-::::::::::-+                 
+                    =-::::::::::::::::::::::::::::::::::::-+                    
+                        =-::::::::::::::::::::::::::::-*                        
+                              +-::::::::::::::::-+                              
+
+-->

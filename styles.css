@@ -1,0 +1,1121 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #252525;
+    padding: 20px;
+    border-right: 1px solid #3a3a3a;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar-top {
+    flex: 1;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.check-icon {
+    background: #4caf50;
+    color: white;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 1.2rem;
+}
+
+.board-view {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.board-icon {
+    font-size: 1.1rem;
+}
+
+/* View Selector */
+.view-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.view-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.view-option:hover {
+    background: #333;
+}
+
+.view-option.active {
+    background: #667eea;
+    border-color: #764ba2;
+}
+
+.workflow-icon {
+    font-size: 1.1rem;
+}
+
+/* Profile Section */
+.profile-section {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #3a3a3a;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+
+.profile-card:hover {
+    background: #333;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: white;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.profile-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-email {
+    font-size: 0.8rem;
+    color: #aaa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-actions {
+    margin-top: 8px;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 10px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.logout-btn:hover {
+    background: #cc0000;
+    transform: translateY(-2px);
+}
+
+/* Sign In Prompt */
+.signin-prompt {
+    text-align: center;
+    padding: 20px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    margin-top: auto;
+}
+
+.signin-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.signin-prompt p {
+    color: #aaa;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.signin-btn {
+    width: 100%;
+    padding: 10px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.signin-btn:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    overflow-x: auto;
+}
+
+.board {
+    display: flex;
+    gap: 20px;
+    min-height: 100%;
+}
+
+/* Columns */
+.column {
+    flex: 1;
+    min-width: 280px;
+    background: #252525;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.column[data-status="not-started"] {
+    background: #2a2a2a;
+}
+
+.column[data-status="in-progress"] {
+    background: #1a2942;
+}
+
+.column[data-status="done"] {
+    background: #1a3a2a;
+}
+
+.column-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.not-started-indicator {
+    background: #666;
+}
+
+.in-progress-indicator {
+    background: #4a90e2;
+}
+
+.done-indicator {
+    background: #4caf50;
+}
+
+.column-title {
+    flex: 1;
+    font-weight: 500;
+}
+
+.count {
+    background: #3a3a3a;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+/* Cards Container */
+.cards-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+    min-height: 100px;
+}
+
+/* Task Card */
+.task-card {
+    background: #333;
+    padding: 12px 15px;
+    border-radius: 6px;
+    cursor: grab;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.task-card:active {
+    cursor: grabbing;
+}
+
+.task-card:hover {
+    background: #3a3a3a;
+    transform: translateY(-2px);
+}
+
+.task-card.dragging {
+    opacity: 0.5;
+}
+
+.task-emoji {
+    font-size: 1.2rem;
+}
+
+.task-text {
+    flex: 1;
+    color: #fff;
+}
+
+.task-actions {
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.task-card:hover .task-actions {
+    opacity: 1;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+}
+
+.action-btn.move-not-started {
+    background: #666;
+    color: white;
+}
+
+.action-btn.move-not-started:hover {
+    background: #777;
+}
+
+.action-btn.move-in-progress {
+    background: #007AFF;
+    color: white;
+}
+
+.action-btn.move-in-progress:hover {
+    background: #0051D5;
+}
+
+.action-btn.move-done {
+    background: #34C759;
+    color: white;
+}
+
+.action-btn.move-done:hover {
+    background: #2DA045;
+}
+
+.delete-btn {
+    background: #FF3B30;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #D62A20;
+}
+
+/* New Page Button */
+.new-page-btn {
+    background: none;
+    border: none;
+    color: #666;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.new-page-btn:hover {
+    color: #4a90e2;
+    background: #2a2a2a;
+}
+
+.new-page-btn span {
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+
+/* Task Groups */
+.task-group {
+    margin-bottom: 15px;
+    border-left: 2px solid #444;
+    padding-left: 10px;
+}
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 0 8px;
+}
+
+.group-name {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.group-delete-btn {
+    background: #ff3b30;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    opacity: 0;
+}
+
+.task-group:hover .group-delete-btn {
+    opacity: 1;
+}
+
+.group-delete-btn:hover {
+    background: #ff6b63;
+    transform: scale(1.2);
+}
+
+.group-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #2a2a2a;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.modal-buttons button:first-child {
+    background: #4a90e2;
+    color: white;
+}
+
+.modal-buttons button:first-child:hover {
+    background: #357abd;
+}
+
+.modal-buttons button:last-child {
+    background: #444;
+    color: white;
+}
+
+.modal-buttons button:last-child:hover {
+    background: #555;
+}
+
+/* Scrollbar */
+.cards-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cards-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.cards-container::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 3px;
+}
+
+.cards-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/*
+
+                              ::::::::::::::::::::                              
+                        -::::::::::::::::::::::::::::::-                        
+                     ::::::::::::::::::::::::::::::::::::::-                    
+                  :::::-+%@@+::::::::::::::::::::::-%#+-::::::-                 
+               :::::=%@@@@@@@-:::::::::::::::::::::%@@@@@%=:::::-               
+             :::::#@@@@@@@@#::::-*%@@@@@@@@@@@*-:::*@@@@@@@@@=::::-             
+           ::::-%@@@@@@@@=:::*@@@@@@@@@@@@@@@@@@@@*:::#@@@@@@@@+::::-           
+         :::::#@@@@@@@@+::-%@@@@@@@@@@@@@@@@@@@@@@@@%-:-#@@@@@@@@+::::=         
+        ::::+@@@@@@@@%-:-%@@@@@@@@@@@@@@@@@@@@@@@@@@@@%-:=%@@@@@@@%-:::-        
+       ::::*@@@@@@@@*::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::#@@@@@@@@+::::+      
+     ::::-%@@@@@@@@*::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*::%@@@@@@@@#::::=     
+    :::::%@@@@@@@@#::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::#@@@@@@@@#::::=    
+    ::::%@@@@@@@@@-:=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=:=@@@@@@@@@#::::@   
+   ::::*@@@@@@@@@*::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#::*@@@@@@@@@+::::+  
+  ::::+@@@@@@@@@@-::%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%::-@@@@@@@@@@=:::-  
+ :::::%@@@@@@@@@%-::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-::%@@@@@@@@@#::::+ 
+ ::::+@@@@@@@@@@%-::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:::%@@@@@@@@@@=:::: 
+:::::@@@@@@@@@@@%-::%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%:::%@@@@@@@@@@%::::-
+::::=@@@@@@@@@@@@-::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#::-%@@@@@@@@@@@=:::=
+::::+@@@@@@@@@@@@*::=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=::+@@@@@@@@@@@@*:::=
+::::*@@@@@@@@@@@@@-::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+:::%@@@@@@@@@@@@#:::-
+::::#@@@@@@@@@@@@@*:::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*:::+@@@@@@@@@@@@@#::::
+::::#@@@@@@@@@@@@@@=:::=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::::%@@@@@@@@@@@@@#::::
+::::*@@@@@@@@@@@@@@@-::::#@@@@@@@@@@@@@@@@@@@@@@@@@@@@%:::::%@@@@@@@@@@@@@@#:::-
+::::+@@@@@@@@@@@@%-:::::::-%@@@@@@@@@@@@@@@@@@@@@@@@%-:::::::*@@@@@@@@@@@@@*:::-
+::::=@@@@@@@@@%=:::::::::::::+@@@@@@@@@@@@@@@@@@@@@@@%-::::::::-#@@@@@@@@@@+:::=
+:::::%@@@@@@+:::::::::::::::::::-+%@@@@@@@@@@%+-:=%@@@@%-:::::::::=%@@@@@@@::::=
+ ::::-%@@#-::::::::::::::::::::::::::::::::::::::::=%@@@@%+:::::::::-+%@@@+::::# 
+ -::::==::::::::::::-#-::::::::::::::::::::::::::::::-#@@@@@*::::::::::-##::::+ 
+  ::::::::::::::::=@@@@@#-::::::::::::::::::::::::::::::*@@@@@#-:::::::::::::-  
+   :::::::::::::*@@@@@@@@@@@*-:::::::::::::::::::=*:::::::+%@@@@%-:::::::::::*  
+    :::::::::-%@@@@@*::+%@@@@@@@@%#+-:::::-=*%%@@@@@#:::::::-%@@@@%=::::::::%   
+    -::::::+%@@@@%=:::::::-+%@@@@@@@@@@@@@@@@@@@@@%=::::::::::-#@@@@@*:::::=    
+     -:::*@@@@@#-::::::::::::::-=+#%@@@@@@@%#*=-:::::::::::::::#@@@@*:::::+     
+      -*@@@@@*::::::::::::::::::::::::::::::::::::::::::::::-#@@@@%-::::-*      
+        #@%=:::::::::--:::::::::::::::::::::::::::::::::::=%@@@@%=:::::-        
+         :::::::::::#@@@#-:::::::::::::::::::::::::::::=%@@@@@%=::::::+         
+           -:::::::=@@@@@@@@%+:::::::::::::::::::::+%@@@@@@@%-::::::=           
+             :::::::::=%@@@@@@@@@%%%#**+++**#%%%@@@@@@@@@%=:::::::=             
+               -::::::::::=*%@@@@@@@@@@@@@@@@@@@@@@@@%+-::::::::=               
+                 =:::::::::::::-=+*#%%@@@@@@%%#*+=-::::::::::-+                 
+                    =-::::::::::::::::::::::::::::::::::::-+                    
+                        =-::::::::::::::::::::::::::::-*                        
+                              +-::::::::::::::::-+                              
+
+*/
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    /* Sidebar becomes a top bar on mobile */
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+        border-right: none;
+        border-bottom: 1px solid #3a3a3a;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .sidebar-top {
+        flex: initial;
+    }
+
+    .logo {
+        margin-bottom: 0;
+        font-size: 1.2rem;
+    }
+
+    .check-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+    }
+
+    .board-view {
+        display: none;
+    }
+
+    /* Profile section on mobile */
+    .profile-section {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+    }
+
+    .profile-card {
+        padding: 8px;
+        margin-bottom: 0;
+    }
+
+    .profile-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+
+    .profile-name {
+        font-size: 0.85rem;
+    }
+
+    .profile-email {
+        font-size: 0.75rem;
+    }
+
+    .profile-actions {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #252525;
+        padding: 10px;
+        border-top: 1px solid #3a3a3a;
+        z-index: 999;
+        margin-top: 0;
+    }
+
+    .logout-btn {
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    .signin-prompt {
+        padding: 8px 12px;
+        margin-top: 0;
+    }
+
+    .signin-icon {
+        font-size: 2rem;
+        margin-bottom: 5px;
+    }
+
+    .signin-prompt p {
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+    }
+
+    .signin-btn {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+
+    /* Main content adjustments */
+    .main-content {
+        padding: 15px;
+        padding-bottom: 70px;
+    }
+
+    .board {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .column {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    /* Cards adjustments */
+    .task-card {
+        padding: 10px 12px;
+    }
+
+    .task-emoji {
+        font-size: 1rem;
+    }
+
+    .task-text {
+        font-size: 0.9rem;
+    }
+
+    /* Always show action buttons on mobile */
+    .task-actions {
+        opacity: 1;
+        gap: 3px;
+    }
+
+    .action-btn {
+        width: 16px;
+        height: 16px;
+        font-size: 0.5rem;
+        min-width: 16px;
+        min-height: 16px;
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+
+    .modal-content input {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .modal-buttons button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Group controls */
+    #newGroupInput {
+        margin-bottom: 12px;
+    }
+
+    #newGroupName {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    #groupSelect {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    #newGroupBtn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+
+    /* Task groups */
+    .group-name {
+        font-size: 0.75rem;
+    }
+
+    .group-delete-btn {
+        opacity: 1;
+        width: 12px;
+        height: 12px;
+        font-size: 0.6rem;
+    }
+
+    /* New page button */
+    .new-page-btn {
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    /* Column adjustments */
+    .column-header {
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+    }
+
+    .count {
+        font-size: 0.8rem;
+    }
+}
+
+/* Workflow Canvas Styles */
+.workflow-canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: 
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.workflow-toolbar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+    background: rgba(37, 37, 37, 0.95);
+    padding: 15px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid #444;
+}
+
+.workflow-btn {
+    padding: 10px 16px;
+    background: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.workflow-btn:hover {
+    background: #667eea;
+    border-color: #764ba2;
+    transform: translateY(-2px);
+}
+
+.workflow-btn.active {
+    background: #34C759;
+    border-color: #34C759;
+}
+
+.canvas-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    cursor: default;
+}
+
+.canvas-grid.connecting {
+    cursor: crosshair;
+}
+
+.workflow-task {
+    position: absolute;
+    min-width: 180px;
+    max-width: 250px;
+    background: rgba(42, 42, 42, 0.95);
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: move;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+.workflow-task:hover {
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    border-color: #764ba2;
+    transform: scale(1.02);
+}
+
+.workflow-task.dragging {
+    opacity: 0.8;
+    cursor: grabbing;
+    z-index: 100;
+}
+
+.workflow-task.connecting-source {
+    border-color: #34C759;
+    box-shadow: 0 0 20px rgba(52, 199, 89, 0.5);
+}
+
+.workflow-task.connecting-target {
+    border-color: #ff9500;
+}
+
+.workflow-task-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.workflow-task-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    width: 100%;
+}
+
+.workflow-task-emoji {
+    font-size: 1.2rem;
+}
+
+.workflow-task-actions {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+
+.workflow-task:hover .workflow-task-actions {
+    opacity: 1;
+}
+
+.workflow-task-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(42, 42, 42, 0.95);
+    border: 2px solid #667eea;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #fff;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.workflow-task-btn:hover {
+    background: rgba(102, 126, 234, 0.8);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.workflow-task-btn.delete:hover {
+    background: #ff3b30;
+    border-color: #ff3b30;
+    box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
+}
+
+.workflow-task-description {
+    font-size: 0.85rem;
+    color: #aaa;
+    line-height: 1.4;
+    margin-top: 6px;
+    max-height: 60px;
+    overflow-y: auto;
+}
+
+.workflow-task-connection-point {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #34C759;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 2;
+}
+
+.workflow-task-connection-point.left {
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.workflow-task-connection-point.right {
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.workflow-task-connection-point.top {
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.workflow-task-connection-point.bottom {
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.workflow-task-connection-point:hover {
+    transform: scale(1.5) translate(-50%, -50%);
+    background: #ff9500;
+}
+
+.connections-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.connection-line {
+    stroke: #667eea;
+    stroke-width: 2;
+    fill: none;
+    filter: drop-shadow(0 0 4px rgba(102, 126, 234, 0.4));
+}
+
+.connection-arrow {
+    fill: #667eea;
+    filter: drop-shadow(0 0 4px rgba(102, 126, 234, 0.4));
+}
+
+/* Extra small devices (phones in portrait mode) */
+@media screen and (max-width: 480px) {
+    .logo {
+        font-size: 1rem;
+    }
+
+    .logo-text {
+        display: none;
+    }
+
+    .check-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    .column {
+        padding: 12px;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

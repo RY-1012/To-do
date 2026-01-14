@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TO-DO Board - Login</title>
+
+    <link rel="canonical" href="https://mosambiswas.me/To-Do/login.html" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
+    <meta name="theme-color" content="#1a1a1a" />
+
+    <meta name="description" content="Sign in to your TO-DO board. Use username/password or Google Sign-In." />
+    <meta name="keywords" content="To-Do, Kanban, login, Google Sign-In, Mosam Biswas" />
+    <meta name="author" content="Mosam Biswas" />
+    <meta name="robots" content="index, follow" />
+
+    <meta property="og:title" content="TO-DO Board - Login" />
+    <meta property="og:description" content="Sign in to access your cloud-synced Kanban board." />
+    <meta property="og:image" content="https://mosambiswas.me/To-Do/favicon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mosambiswas.me/To-Do/login.html" />
+    <meta property="og:site_name" content="TO-DO Board" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="TO-DO Board - Login" />
+    <meta name="twitter:description" content="Sign in to access your cloud-synced Kanban board." />
+    <meta name="twitter:image" content="https://mosambiswas.me/To-Do/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-container {
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #fff;
+            margin: 0;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .check-icon {
+            color: #34C759;
+            font-size: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #aaa;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #2a2a2a;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 18px 0;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            height: 1px;
+            background: #333;
+            flex: 1;
+        }
+
+        .google-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .google-hint {
+            margin-top: 10px;
+            text-align: center;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .login-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .login-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .register-btn {
+            background: #764ba2;
+            color: white;
+        }
+
+        .register-btn:hover {
+            background: #653a87;
+            transform: translateY(-2px);
+        }
+
+        .error {
+            color: #ff4444;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: #34C759;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .toggle-form a {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>
+                <span class="check-icon">✓</span>
+                <span>TO-DO</span>
+            </h1>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm">
+            <div class="form-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username">
+                <div class="error" id="loginUsernameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+                <div class="error" id="loginPasswordError"></div>
+            </div>
+
+            <div id="loginMessage"></div>
+
+            <div class="google-hint" id="apiHint" style="display:none;"></div>
+
+            <div class="form-buttons">
+                <button class="login-btn" onclick="login()">Login</button>
+            </div>
+
+            <div class="divider">OR</div>
+            <div class="google-wrap">
+                <div id="googleSignInButton"></div>
+            </div>
+            <div class="google-hint" id="googleHint" style="display:none;">
+                Google sign-in needs a configured Client ID and a hosted origin (use `http://localhost:8000`, not `file:///`).
+            </div>
+
+            <div class="toggle-form">
+                Don't have an account? <a onclick="toggleForms()">Register</a>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" style="display: none;">
+            <div class="form-group">
+                <label for="registerUsername">Username</label>
+                <input type="text" id="registerUsername" placeholder="Choose a username">
+                <div class="error" id="registerUsernameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" placeholder="Enter your email">
+                <div class="error" id="registerEmailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" placeholder="Create a password (min 6 chars)">
+                <div class="error" id="registerPasswordError"></div>
+            </div>
+
+            <div id="registerMessage"></div>
+
+            <div class="form-buttons">
+                <button class="register-btn" onclick="register()">Register</button>
+            </div>
+
+            <div class="toggle-form">
+                Already have an account? <a onclick="toggleForms()">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        const API_URL = window.TODO_API_URL || 'http://localhost:5000/api';
+        const GOOGLE_CLIENT_ID = '367094542116-2hcm8562n7k56esnnp362c3h2igc95c0.apps.googleusercontent.com';
+
+        function toggleForms() {
+            document.getElementById('loginForm').style.display = 
+                document.getElementById('loginForm').style.display === 'none' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = 
+                document.getElementById('registerForm').style.display === 'none' ? 'block' : 'none';
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+            document.querySelectorAll('[id$="Message"]').forEach(el => el.textContent = '');
+        }
+
+        async function login() {
+            clearErrors();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!username) {
+                document.getElementById('loginUsernameError').textContent = 'Username required';
+                return;
+            }
+            if (!password) {
+                document.getElementById('loginPasswordError').textContent = 'Password required';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    document.getElementById('loginMessage').innerHTML = 
+                        `<div class="error">${data.message}</div>`;
+                    return;
+                }
+
+                // Save token and user info
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                // Redirect to board
+                window.location.href = 'board.html';
+            } catch (err) {
+                const apiHint = document.getElementById('apiHint');
+                if (apiHint) {
+                    apiHint.style.display = 'block';
+                    apiHint.textContent = `API: ${API_URL}`;
+                }
+                document.getElementById('loginMessage').innerHTML = 
+                    `<div class="error">Connection error: ${err.message}${err.message === 'Failed to fetch' ? '<br/>Tip: check if your network/Private DNS/adblock blocks onrender.com. Try opening /api/health directly.' : ''}</div>`;
+            }
+        }
+
+        async function handleGoogleCredential(credential) {
+            try {
+                const response = await fetch(`${API_URL}/auth/google`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ credential })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    document.getElementById('loginMessage').innerHTML =
+                        `<div class="error">${data.message || 'Google login failed'}</div>`;
+                    return;
+                }
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                window.location.href = 'board.html';
+            } catch (err) {
+                const apiHint = document.getElementById('apiHint');
+                if (apiHint) {
+                    apiHint.style.display = 'block';
+                    apiHint.textContent = `API: ${API_URL}`;
+                }
+                document.getElementById('loginMessage').innerHTML =
+                    `<div class="error">Connection error: ${err.message}${err.message === 'Failed to fetch' ? '<br/>Tip: check if your network/Private DNS/adblock blocks onrender.com. Try opening /api/health directly.' : ''}</div>`;
+            }
+        }
+
+        async function testBackendConnection() {
+            const apiHint = document.getElementById('apiHint');
+            const msg = document.getElementById('loginMessage');
+            if (apiHint) {
+                apiHint.style.display = 'block';
+                apiHint.textContent = `API: ${API_URL}`;
+            }
+            if (msg) {
+                msg.innerHTML = '<div class="success">Testing backend connection...</div>';
+            }
+
+            // If config.js didn't load on a deployed site, API_URL falls back to localhost.
+            // That will always fail on mobile/production, so show a clear hint.
+            if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                if (String(API_URL).includes('http://localhost:5000')) {
+                    if (msg) {
+                        msg.innerHTML = '<div class="error">Config error: API is set to localhost. Use https://mosambiswas.me/To-Do/login.html (not a different path) and hard refresh so config.js loads.</div>';
+                    }
+                    return;
+                }
+            }
+            try {
+                const res = await fetch(`${API_URL}/health`, { method: 'GET' });
+                const text = await res.text();
+                if (!res.ok) {
+                    if (msg) msg.innerHTML = `<div class="error">Health check failed (${res.status}).</div>`;
+                    return;
+                }
+                if (msg) msg.innerHTML = `<div class="success">Backend reachable. ${text}</div>`;
+            } catch (err) {
+                if (msg) msg.innerHTML = `<div class="error">Health check error: ${err.message}</div>`;
+            }
+        }
+
+        function initGoogleSignIn() {
+            const hint = document.getElementById('googleHint');
+            const isPlaceholder = !GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.startsWith('YOUR_GOOGLE_CLIENT_ID');
+
+            if (isPlaceholder) {
+                hint.style.display = 'block';
+                return;
+            }
+
+            if (!window.google || !google.accounts || !google.accounts.id) {
+                // GIS script not ready yet
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: (response) => {
+                    if (response && response.credential) {
+                        handleGoogleCredential(response.credential);
+                    }
+                }
+            });
+
+            const buttonEl = document.getElementById('googleSignInButton');
+            if (buttonEl) {
+                google.accounts.id.renderButton(buttonEl, {
+                    theme: 'outline',
+                    size: 'large',
+                    text: 'continue_with',
+                    shape: 'rectangular',
+                    width: 320
+                });
+            }
+        }
+
+        async function register() {
+            clearErrors();
+            const username = document.getElementById('registerUsername').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+
+            let hasError = false;
+
+            if (!username) {
+                document.getElementById('registerUsernameError').textContent = 'Username required';
+                hasError = true;
+            }
+            if (!email) {
+                document.getElementById('registerEmailError').textContent = 'Email required';
+                hasError = true;
+            }
+            if (!password || password.length < 6) {
+                document.getElementById('registerPasswordError').textContent = 'Password must be at least 6 characters';
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    document.getElementById('registerMessage').innerHTML = 
+                        `<div class="error">${data.message}</div>`;
+                    return;
+                }
+
+                // Save token and user info
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                // Redirect to board
+                window.location.href = 'board.html';
+            } catch (err) {
+                const apiHint = document.getElementById('apiHint');
+                if (apiHint) {
+                    apiHint.style.display = 'block';
+                    apiHint.textContent = `API: ${API_URL}`;
+                }
+                document.getElementById('registerMessage').innerHTML = 
+                    `<div class="error">Connection error: ${err.message}</div>`;
+            }
+        }
+
+        // Allow Enter key to submit
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (document.getElementById('loginForm').style.display !== 'none') {
+                    login();
+                } else {
+                    register();
+                }
+            }
+        });
+
+        // Initialize Google Sign-In after GIS loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Quick connection check helps debug mobile/network issues
+            testBackendConnection();
+            const retry = () => {
+                initGoogleSignIn();
+                if (!window.google || !google.accounts || !google.accounts.id) {
+                    setTimeout(retry, 100);
+                }
+            };
+            retry();
+        });
+    </script>
+
+    <!-- Google Identity Services (Sign in with Google) -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>
+<!--
+
+                              ::::::::::::::::::::                              
+                        -::::::::::::::::::::::::::::::-                        
+                     ::::::::::::::::::::::::::::::::::::::-                    
+                  :::::-+%@@+::::::::::::::::::::::-%#+-::::::-                 
+               :::::=%@@@@@@@-:::::::::::::::::::::%@@@@@%=:::::-               
+             :::::#@@@@@@@@#::::-*%@@@@@@@@@@@*-:::*@@@@@@@@@=::::-             
+           ::::-%@@@@@@@@=:::*@@@@@@@@@@@@@@@@@@@@*:::#@@@@@@@@+::::-           
+         :::::#@@@@@@@@+::-%@@@@@@@@@@@@@@@@@@@@@@@@%-:-#@@@@@@@@+::::=         
+        ::::+@@@@@@@@%-:-%@@@@@@@@@@@@@@@@@@@@@@@@@@@@%-:=%@@@@@@@%-:::-        
+       ::::*@@@@@@@@*::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::#@@@@@@@@+::::+      
+     ::::-%@@@@@@@@*::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*::%@@@@@@@@#::::=     
+    :::::%@@@@@@@@#::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::#@@@@@@@@#::::=    
+    ::::%@@@@@@@@@-:=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=:=@@@@@@@@@#::::@   
+   ::::*@@@@@@@@@*::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#::*@@@@@@@@@+::::+  
+  ::::+@@@@@@@@@@-::%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%::-@@@@@@@@@@=:::-  
+ :::::%@@@@@@@@@%-::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-::%@@@@@@@@@#::::+ 
+ ::::+@@@@@@@@@@%-::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:::%@@@@@@@@@@=:::: 
+:::::@@@@@@@@@@@%-::%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%:::%@@@@@@@@@@%::::-
+::::=@@@@@@@@@@@@-::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#::-%@@@@@@@@@@@=:::=
+::::+@@@@@@@@@@@@*::=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=::+@@@@@@@@@@@@*:::=
+::::*@@@@@@@@@@@@@-::+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+:::%@@@@@@@@@@@@#:::-
+::::#@@@@@@@@@@@@@*:::*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*:::+@@@@@@@@@@@@@#::::
+::::#@@@@@@@@@@@@@@=:::=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+::::%@@@@@@@@@@@@@#::::
+::::*@@@@@@@@@@@@@@@-::::#@@@@@@@@@@@@@@@@@@@@@@@@@@@@%:::::%@@@@@@@@@@@@@@#:::-
+::::+@@@@@@@@@@@@%-:::::::-%@@@@@@@@@@@@@@@@@@@@@@@@%-:::::::*@@@@@@@@@@@@@*:::-
+::::=@@@@@@@@@%=:::::::::::::+@@@@@@@@@@@@@@@@@@@@@@@%-::::::::-#@@@@@@@@@@+:::=
+:::::%@@@@@@+:::::::::::::::::::-+%@@@@@@@@@@%+-:=%@@@@%-:::::::::=%@@@@@@@::::=
+ ::::-%@@#-::::::::::::::::::::::::::::::::::::::::=%@@@@%+:::::::::-+%@@@+::::# 
+ -::::==::::::::::::-#-::::::::::::::::::::::::::::::-#@@@@@*::::::::::-##::::+ 
+  ::::::::::::::::=@@@@@#-::::::::::::::::::::::::::::::*@@@@@#-:::::::::::::-  
+   :::::::::::::*@@@@@@@@@@@*-:::::::::::::::::::=*:::::::+%@@@@%-:::::::::::*  
+    :::::::::-%@@@@@*::+%@@@@@@@@%#+-:::::-=*%%@@@@@#:::::::-%@@@@%=::::::::%   
+    -::::::+%@@@@%=:::::::-+%@@@@@@@@@@@@@@@@@@@@@%=::::::::::-#@@@@@*:::::=    
+     -:::*@@@@@#-::::::::::::::-=+#%@@@@@@@%#*=-:::::::::::::::#@@@@*:::::+     
+      -*@@@@@*::::::::::::::::::::::::::::::::::::::::::::::-#@@@@%-::::-*      
+        #@%=:::::::::--:::::::::::::::::::::::::::::::::::=%@@@@%=:::::-        
+         :::::::::::#@@@#-:::::::::::::::::::::::::::::=%@@@@@%=::::::+         
+           -:::::::=@@@@@@@@%+:::::::::::::::::::::+%@@@@@@@%-::::::=           
+             :::::::::=%@@@@@@@@@%%%#**+++**#%%%@@@@@@@@@%=:::::::=             
+               -::::::::::=*%@@@@@@@@@@@@@@@@@@@@@@@@%+-::::::::=               
+                 =:::::::::::::-=+*#%%@@@@@@%%#*+=-::::::::::-+                 
+                    =-::::::::::::::::::::::::::::::::::::-+                    
+                        =-::::::::::::::::::::::::::::-*                        
+                              +-::::::::::::::::-+                              
+
+-->
